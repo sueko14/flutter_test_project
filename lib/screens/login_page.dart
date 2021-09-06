@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_test_project/screens/chat_page.dart';
+import 'package:flutter_test_project/screens/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                       // チャット画面に遷移＋ログイン画面を破棄
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
-                          return ChatPage(result.user!);
+                          return HomePage(user: result.user!);
                         }),
                       );
                     } catch (e) {
@@ -95,13 +95,43 @@ class _LoginPageState extends State<LoginPage> {
                       // チャット画面に遷移＋ログイン画面を破棄
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
-                          return ChatPage(result.user!);
+                          return HomePage(user: result.user!);
                         }),
                       );
                     } catch (e) {
                       // ユーザー登録に失敗した場合
                       setState(() {
                         infoText = "登録に失敗しました：${e.toString()}";
+                      });
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                width: double.infinity,
+                // ユーザー登録ボタン
+                child: ElevatedButton(
+                  child: Text('テストログイン'),
+                  onPressed: () async {
+                    try {
+                      // メール/パスワードでログイン
+                      final FirebaseAuth auth = FirebaseAuth.instance;
+                      final result = await auth.signInWithEmailAndPassword(
+                        email: "yu.nakamura14@gmail.com",
+                        password: "Satosansan123",
+                      );
+                      // ログインに成功した場合
+                      // チャット画面に遷移＋ログイン画面を破棄
+                      await Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) {
+                          return HomePage(user: result.user!);
+                        }),
+                      );
+                    } catch (e) {
+                      // ログインに失敗した場合
+                      setState(() {
+                        infoText = "ログインに失敗しました：${e.toString()}";
                       });
                     }
                   },
